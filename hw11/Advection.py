@@ -62,13 +62,16 @@ for idxMesh in range(len(meshSizes)):
             if i==mx-2:
                 ipp=1
 
+            # U[i, t+1] = U[i, t] - CFL*(U[ip, t]-U[im, t])/2 \
+            #         + (k**2/2)*a_values[i]*da_values[i]*(U[ip, t]-U[im, t])/(2*h) \
+            #         + CFL**2*(U[ip, t]-2*U[i, t]+U[im, t])/2 \
+            #         - (k**3/6)*a_values[i]*da_values[i]**2*(U[ip, t]-U[im, t])/(2*h) \
+            #         - (k**3/6)*a_values[i]*app_values[i]*(U[ip, t]-U[im, t])/(2*h) \
+            #         - (k**3/2)*a_values[i]**2*da_values[i]*(U[ip, t]-2*U[i, t]+U[im, t])/(2*h) \
+            #         - CFL**3*(-U[imm, t]+3*U[im, t]-3*U[i, t]+U[ip, t])/6
             U[i, t+1] = U[i, t] - CFL*(U[ip, t]-U[im, t])/2 \
                     + (k**2/2)*a_values[i]*da_values[i]*(U[ip, t]-U[im, t])/(2*h) \
-                    + CFL**2*(U[ip, t]-2*U[i, t]+U[im, t])/2 \
-                    - (k**3/6)*a_values[i]*da_values[i]**2*(U[ip, t]-U[im, t])/(2*h) \
-                    - (k**3/6)*a_values[i]*app_values[i]*(U[ip, t]-U[im, t])/(2*h) \
-                    - (k**3/2)*a_values[i]**2*da_values[i]*(U[ip, t]-2*U[i, t]+U[im, t])/(2*h) \
-                    - CFL**3*(-U[imm, t]+3*U[im, t]-3*U[i, t]+U[ip, t])/6
+                    + CFL**2*(U[ip, t]-2*U[i, t]+U[im, t])/2
 
     error = abs(np.exp(-4*(x-np.pi)**2)-U[:, -1])
     L2Error = np.sqrt(np.sum(error**2)*h)
